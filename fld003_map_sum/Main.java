@@ -1,4 +1,4 @@
-package map_sum;
+package fld003_map_sum;
 
 import java.util.concurrent.ForkJoinPool;
 

@@ -1,4 +1,4 @@
-package prefix_sum1;
+package fld004_prefix_sum1;
 
 import java.util.concurrent.RecursiveAction;
 

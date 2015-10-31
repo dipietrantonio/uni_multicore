@@ -1,4 +1,4 @@
-package sum_thread;
+package fld001_sum_explicit_threads;
 
 public class MainClass {
 	/**metodo della classe principale che esegue l'esempio della somma

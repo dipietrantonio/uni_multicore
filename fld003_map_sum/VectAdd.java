@@ -1,4 +1,4 @@
-package map_sum;
+package fld003_map_sum;
 import java.util.concurrent.*;
 public class VectAdd extends RecursiveAction{
 	/**
@@ -17,7 +17,7 @@ public class VectAdd extends RecursiveAction{
 	}
 	
 	protected void compute() {
-		if(lo - hi < 10){
+		if(hi - lo < 10){
 			for(int i = lo; i < hi; i++) res[i] = arr1[i] + arr2[i];
 		}else{
 			int m = (lo + hi )/2;

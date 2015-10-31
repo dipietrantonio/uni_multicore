@@ -1,4 +1,4 @@
-package forkjoin_sum;
+package fld002_forkjoin_sum;
 
 import java.util.concurrent.*;
 

@@ -1,4 +1,4 @@
-package esempio_uno;
+package fld000_esempio;
 
 
 public class MainClass {

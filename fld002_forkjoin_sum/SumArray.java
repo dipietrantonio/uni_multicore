@@ -1,4 +1,4 @@
-package forkjoin_sum;
+package fld002_forkjoin_sum;
 
 public class SumArray extends java.util.concurrent.RecursiveTask<Integer> {
 	private int[] a;
@@ -12,7 +12,7 @@ public class SumArray extends java.util.concurrent.RecursiveTask<Integer> {
 	}
 	protected Integer compute() {
 		
-		if((lo - hi) <= 10){ //cutoff
+		if((hi - lo) <= 10){ //cutoff
 			for(int i = lo; i < hi; i++) ans += a[i];
 		}else{
 			int m = (lo + hi) / 2;
