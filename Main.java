@@ -1,14 +1,26 @@
 import java.util.concurrent.ForkJoinPool;
 
-import fld005_prefix_sum2.PrefixSum;
+import fld007_packing.IPackProperty;
+import fld007_packing.PackingClass;
 
 public class Main {
+	
 	public static void main(String[] args){
+		//lets try a packing function
 		ForkJoinPool p = new ForkJoinPool();
-		int[] in = new int[100];
-		for(int i = 0; i < 100; i++) in[i] = i + 1;		
-		PrefixSum ds = new PrefixSum(p, 5);
-		int[] out = ds.execute(in);
-		for(int i = 0; i < 100; i++) System.out.print(out[i] + ", ");
+		int[] in = {3, 2, 123, 1, 43, 3, 22, 87, 3, 6, 9, 23, 11, 9867, 4, 23, 57, 332, 8};
+				
+		PackingClass packing = new PackingClass(p, 4, 
+				new IPackProperty() {
+
+					public boolean check(int x) {
+						return x > 10;
+					}
+				});
+		int[] out = packing.pack(in);
+		
+		for(int i = 0; i < out.length; i++){
+			System.out.print(out[i] + ", ");
+		}
 	}
 }

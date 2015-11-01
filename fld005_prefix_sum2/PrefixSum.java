@@ -4,7 +4,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 
-public class PrefixSum {
+public class PrefixSum{
 
 	private ForkJoinPool pool;
 	private int CUTOFF; 
@@ -107,8 +107,12 @@ class FromLeftMap extends RecursiveAction{
 			leftChild.setFromLeft(node.getFromLeft());
 			rightChild.setFromLeft(node.getFromLeft() + leftChild.getSum());
 			/*recursive calls*/
-			new FromLeftMap(leftChild, output,input, CUTOFF).fork();
-			new FromLeftMap(rightChild, output, input, CUTOFF).fork();			
+			FromLeftMap x = new FromLeftMap(leftChild, output,input, CUTOFF);
+			FromLeftMap y = new FromLeftMap(rightChild, output, input, CUTOFF);			
+			
+			x.fork();
+			y.compute();
+			x.join();
 			
 		}else{
 			output[lo] = node.getFromLeft() + input[lo];
