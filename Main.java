@@ -2,6 +2,7 @@ import java.util.concurrent.ForkJoinPool;
 
 import fld007_packing.IPackProperty;
 import fld007_packing.PackingClass;
+import fld008_packing_advanced.AdvPackingClass;
 
 public class Main {
 	
@@ -10,7 +11,7 @@ public class Main {
 		ForkJoinPool p = new ForkJoinPool();
 		int[] in = {3, 2, 123, 1, 43, 3, 22, 87, 3, 6, 9, 23, 11, 9867, 4, 23, 57, 332, 8};
 				
-		PackingClass packing = new PackingClass(p, 4, 
+		AdvPackingClass packing = new AdvPackingClass(p, 4, 
 				new IPackProperty() {
 
 					public boolean check(int x) {
