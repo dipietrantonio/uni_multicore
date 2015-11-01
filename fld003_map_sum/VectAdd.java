@@ -1,9 +1,7 @@
 package fld003_map_sum;
 import java.util.concurrent.*;
 public class VectAdd extends RecursiveAction{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	int lo, hi;
 	int[] arr1, arr2, res;
