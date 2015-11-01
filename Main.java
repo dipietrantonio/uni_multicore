@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args){
 		//lets try a packing function
 		ForkJoinPool p = new ForkJoinPool();
-		int[] in = {3, 2, 123, 1, 43, 3, 22, 87, 3, 6, 9, 23, 11, 9867, 4, 23, 57, 332, 8};
+		int[] in = {3, 2, 123, 1, 43, 3, 22, 87, 3, 6, 9, 23, 11, 9867, 4, 23, 57, 332, 8, 6, 12};
 				
 		AdvPackingClass packing = new AdvPackingClass(p, 7, 
 				new IPackProperty() {

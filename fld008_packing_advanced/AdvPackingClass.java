@@ -20,8 +20,6 @@ public class AdvPackingClass{
 		this.CUTOFF = cutoff;
 	}
 	
-
-	
 	public int[] pack(int[] input){
 		
 		int len = input.length;

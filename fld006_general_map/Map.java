@@ -61,7 +61,7 @@ class MapThread extends RecursiveAction{
 			
 			MapThread[] arr = new MapThread[tot_units];
 			
-			for(int i = 0; i <= tot_units; i++){
+			for(int i = 0; i < tot_units; i++){
 				
 				/*Le seguenti istruizioni servono a ripartizionare bene 
 				 * gli elementi in sottoarray. 
@@ -69,8 +69,6 @@ class MapThread extends RecursiveAction{
 				int fine = (i+1) * CUTOFF;
 				int inizio = i * CUTOFF;
 				fine = fine > hi ? hi : fine;				
-				if(fine == inizio) break; //l'ultimo sottoarray è vuoto
-				
 				arr[i] = new MapThread(input, output, inizio, fine, CUTOFF, func);
 				arr[i].fork();
 			}
