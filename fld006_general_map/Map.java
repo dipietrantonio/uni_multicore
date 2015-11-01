@@ -51,14 +51,26 @@ class MapThread extends RecursiveAction{
 		// TODO Auto-generated method stub
 		if(hi - lo > CUTOFF){
 			//Do recursive calls!
-			int tot_units = (hi - lo) / CUTOFF;
-			MapThread[] arr = new MapThread[tot_units + 1];
+			int n = hi - lo;
+			int tot_units = 0;
+			
+			if (n % CUTOFF == 0)
+				tot_units = n / CUTOFF;
+			else
+				tot_units = n / CUTOFF + 1;
+			
+			MapThread[] arr = new MapThread[tot_units];
 			
 			for(int i = 0; i <= tot_units; i++){
+				
+				/*Le seguenti istruizioni servono a ripartizionare bene 
+				 * gli elementi in sottoarray. 
+				 */
 				int fine = (i+1) * CUTOFF;
 				int inizio = i * CUTOFF;
-				fine = fine > hi ? hi : fine;
-				if(fine == inizio) break;
+				fine = fine > hi ? hi : fine;				
+				if(fine == inizio) break; //l'ultimo sottoarray è vuoto
+				
 				arr[i] = new MapThread(input, output, inizio, fine, CUTOFF, func);
 				arr[i].fork();
 			}

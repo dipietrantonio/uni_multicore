@@ -43,7 +43,5 @@ public class Main {
 		}
 		
 		System.out.println(output[N-1]);
-		
-		
 	}
 }

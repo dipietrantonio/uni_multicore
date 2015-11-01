@@ -12,12 +12,15 @@ public class AdvPackingClass{
 	private ForkJoinPool pool;
 	private int CUTOFF; 
 	private IPackProperty property;
+
 	
 	public AdvPackingClass(ForkJoinPool pool, int cutoff, IPackProperty prop){
 		this.pool = pool;
 		this.property = prop;
 		this.CUTOFF = cutoff;
 	}
+	
+
 	
 	public int[] pack(int[] input){
 		

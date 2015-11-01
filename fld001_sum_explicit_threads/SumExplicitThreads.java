@@ -1,9 +1,9 @@
 package fld001_sum_explicit_threads;
 
-public class MainClass {
+public class SumExplicitThreads {
 	/**metodo della classe principale che esegue l'esempio della somma
 	 * @throws InterruptedException */
-	public static void mymain(String[] args) throws InterruptedException{
+	public void execute(String[] args) throws InterruptedException{
 			int n = Integer.parseInt(args[0]); //numero interi da sommare
 			int t = Integer.parseInt(args[1]); //numero threads
 			int[] a = new int[n];
@@ -27,5 +27,26 @@ public class MainClass {
 				}
 				System.out.println("Somma: " + String.valueOf(an));
 			}
+	}
+	
+	public class SumThread extends java.lang.Thread{
+		int lo;
+		int hi;
+		int[] arr;
+		int ans;
+		
+		public SumThread(int[] a, int lo, int hi){
+			this.lo = lo;
+			this.hi = hi;
+			this.arr = a;
+		}
+		
+		public void run(){
+			for(int i = lo; i < hi; i++){
+				//ans += arr[i];
+				ans += (long)(Math.sqrt(arr[i])*Math.sqrt((i)/3.14)*3.14);
+			}
+			
+		}
 	}
 }
