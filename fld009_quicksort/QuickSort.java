@@ -11,7 +11,6 @@ public class QuickSort{
 		this.pool = pool;
 	}
 	/**Questa funzione attiva l'ordinamento sull'array input.
-	 * Viene utilizzato un array di supporto work, mentre gli
 	 * elementi ordinati si troveranno in "output" alla fine 
 	 * dell'esecuzione.
 	 * @param input
@@ -19,9 +18,8 @@ public class QuickSort{
 	 */
 	public int[] sort(int[] input){
 		int[] out = new int[input.length];
-		int[] work = new int[input.length];
 		int[] boolean_values = new int[input.length]; //usato per il packing
-		PartitionAction first = new PartitionAction(input, out, work, boolean_values, 0, input.length);
+		PartitionAction first = new PartitionAction(input, out, out, boolean_values, 0, input.length);
 		pool.invoke(first);
 		return out;
 	}
@@ -37,7 +35,9 @@ public class QuickSort{
 		private int hi;
 		private int[] work;
 
-		
+		/**il puntatore input e work vengono scambiati ad ogni chiamata. Il puntatore output è costante
+		 * in quanto indica in quale array vanno posizionati i pivot.
+		 */
 		public PartitionAction(int[] input, int[] output, int[] work, int[] boolean_values, int lo, int hi){
 			this.input = input;
 			this.work = work;
@@ -72,14 +72,14 @@ public class QuickSort{
 				output[actual_pos] = input[ind_pivot]; //Infine inseriamo il pivot al suo posto
 				
 				/*ora ordiniamo i sottoarray*/
-				int[] temp1 = input;
-				int[] temp2 = work;
-
-				PartitionAction left = new PartitionAction(temp2, output, temp1, boolean_values, lo, actual_pos);
-				PartitionAction right = new PartitionAction(temp2, output, temp1, boolean_values, actual_pos + 1, hi);
+				
+				PartitionAction left = new PartitionAction(work, output, input, boolean_values, lo, actual_pos);
+				PartitionAction right = new PartitionAction(work, output, input, boolean_values, actual_pos + 1, hi);
 				left.fork();
 				right.compute();
 				left.join();
+			}else{
+				
 			}
 		}		
 	}
