@@ -6,7 +6,18 @@ import java.util.concurrent.RecursiveTask;
 
 import fld005_prefix_sum2.BinaryTreeNode;
 import fld007_packing.IPackProperty;
-
+/**Questa versione implementa il packing unendo la prima fase con la seconda, ossia
+ *  -il mapping degli elementi dell'array di input in un array di booleani
+ *  -la costruzione dell'abero esplicito bottom up durante il calcolo degli 
+ *  elementi validi nei sottoarray (sommando gli elmenti dei corrispondenti dei sottoarray
+ *  di booleani.
+ *  
+ *  Unisce inoltre la fase di discesa topdown dell'albero esplicito (per il calcolo delle
+ *  somme prefisse sull'array di booleani) con il posizionamento degli elementi validi in
+ *  input in un array di output, l'uno di seguito all'altro.
+ * @author cristian
+ *
+ */
 public class AdvPackingClass{
 
 	private ForkJoinPool pool;
@@ -74,8 +85,9 @@ class SumReduce extends RecursiveTask<BinaryTreeNode>{
 			left.fork();
 			BinaryTreeNode n2 = right.compute();			
 			BinaryTreeNode n1 = left.join();
+			
 			//calcoliamo la somma del padre dai risultati dei figli
-			node.setSum(n1.getSum()+ n2.getSum());
+			node.setSum(n1.getSum() + n2.getSum());
 			//impostiamo gli archi dal nodo padre ai figli
 			node.setLeftChild(n1);
 			node.setRightChild(n2);
@@ -85,7 +97,7 @@ class SumReduce extends RecursiveTask<BinaryTreeNode>{
 			int s = 0;
 			for(int i = lo; i < hi; i++){
 				if(prop.check(input[i])){
-					boolean_values[i] = 1;
+					boolean_values[i] = 1; //OTTIMIZZAZIONE 1: Calcolo dell'array di booleani
 					s = s + 1;
 				}
 			}
@@ -134,8 +146,8 @@ class FromLeftMap extends RecursiveAction{
 			x.join();
 			
 		}else{
-			int temp = node.getFromLeft() + bin[lo]; //PREFIX SUM
-			if(bin[lo] == 1) output[temp - 1] = input[lo]; 
+			int temp = node.getFromLeft() + bin[lo]; //somma prefissa (necessaria solamente l'ultima)
+			if(bin[lo] == 1) output[temp - 1] = input[lo]; //OTTIMIZZAZIONE 2: output
 			
 			for(int i = lo + 1; i < hi; i++){
 				temp = temp + bin[i];

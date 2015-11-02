@@ -73,7 +73,7 @@ class MapThread extends RecursiveAction{
 				arr[i].fork();
 			}
 			for(int i = 0; i < tot_units; i++){
-				((MapThread) arr[i]).join();
+				arr[i].join();
 			}
 		}else{ //sequential code
 			func.calculateValue(input, output, lo, hi);
