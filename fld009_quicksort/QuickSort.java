@@ -78,8 +78,6 @@ public class QuickSort{
 				left.fork();
 				right.compute();
 				left.join();
-			}else{
-				
 			}
 		}		
 	}
