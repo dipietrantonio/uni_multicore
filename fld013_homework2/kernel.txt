@@ -1,0 +1,101 @@
+/*********************************************************************
+Codice "Kernel" per l'homework 2 di Multicore
+
+Autore: Cristian Di Pietrantonio
+
+Parametri:
+        - rows:       Numero di righe nell'immagine in input;
+        - cols:       Numero di colonne nell'immagine in input;
+        - offset:     Valore che rappresenta da che valore, in ogni dimensione, e' possibile
+                      iniziare ad applicare l'effetto di blur. Tutti i pixel le cui coordinate
+                      hanno una componente minore dell'offset o maggiori di  max(dim) - offset,
+                      dove max(dim) e' il valore massimo per una data dimensione dim, rappresentano
+                      pixel che saranno esclusi nell'immagine di output (ma il cui valore sarà
+                      utilizzato per calcolare i pixel piu interni).
+        - input:      Immagine in input
+        - output:     Buffer per memorizzare l'immagine in output.
+        - filter:     Matrice contenente il filtro di blurring
+        - locFilter:  Buffer allocato in memoria locale ad ogni workgroup per ospitare il filtro.
+        - norm:       Valore utilizzato per normalizzare la somma da cui e' ottenuto il pixel in
+                      output.
+        - locInput:   Buffer allocato in memoria locale per mantenere la parte dell'input necessaria
+                      ad un workgroup per effettuare la computazione.
+
+********************************************************************************************/
+__kernel void blur(const int rows, const int cols, const int offset,
+			__global unsigned char *input, __global unsigned char *output,
+			__global unsigned char *filter, __local unsigned char *locFilter,
+			const int norm, __local unsigned char *locInput){
+
+	/*ogni processing elment corrisponde ad un pixel nell'immagine. Le variabili
+	h e w indicano le coordinate di un generico pixel all'interno dell'immagine
+	in input. Si assume (e si ricorda) che l'NDRange e' inizializzato con un
+	offset pari al valore contenuto nel parametro "offset", quindi h e w assumono
+	valori a partire da offset.*/
+	int h = get_global_id(0);
+	int w = get_global_id(1);
+
+	if(h < rows + offset && w < cols + offset){
+		/*se la condizione dell'if e' soddisfatta, l'attuale work item ha un corrispondente pixel
+		da dover copiare nella memoria locale del workgroup. Per fare cio' utilizzeremo le coordinate 
+                del work item all'interno del work group*/
+		int lh = get_local_id(0); //l sta per "local"
+		int lw = get_local_id(1);
+
+		/*Assumiamo che il codice host abbia fatto sì che il workgroup sia organizzato in modo tale
+		da potersi astrarre come matrice quadrata. La grandezza di ogni dimensione e' la stessa. Sebbene
+		si potesse generalizzare anche a matrici non quadrate, cio' ci semplifica di poco il codice.*/
+		int size = get_local_size(0);
+
+		int filterSize = offset * 2 + 1; //grandezza del lato della matrice del filtro
+
+		/*Ora bisogna copiare il filtro e la parte dell'input che e' necessaria alla computazione.*/
+
+		//locInput e' una matrice in memoria locale di dimensioni tsize x tsize
+		int tsize = size + offset * 2;
+		int ph = lh;
+		int pw = lw;
+		int gh = h - offset;
+		int gw = w - offset;
+		
+		//copiamo l'input. Ogni workitem copia determinati punti dell'input. 
+		for(ph = lh; ph < tsize; ph+= size, gh+= size){
+			if(gh >= rows) break;
+			for(pw = lw; pw < tsize; pw+=size, gw+=size){
+				if(gw >= cols) break;
+				locInput[ph*tsize + pw] = input[gh*cols + gw];
+			}
+			gw = w - offset;
+		}
+
+		//copiamo il filtro
+		for(ph = lh; ph < filterSize; ph+= size){
+			for(pw = lw; pw < filterSize; pw+=size){
+				locFilter[ph*filterSize + pw] = filter[ph*filterSize + pw];
+			}
+		}
+
+		//a questo punto tutti i workitem devono aspettare prima di procedere
+
+		barrier(CLK_LOCAL_MEM_FENCE);
+
+		if(h < (rows - offset) && w < (cols - offset)){ //coordinate alle quali è possibile applicare il filtro
+			int tw = lw + offset;
+			int th = lh + offset;
+
+			unsigned int sum = 0;
+			int i, j, l, m; //contatori
+			for(i = -offset, l = 0; i < offset + 1; i++, l++){
+				for(j = -offset, m = 0; j < offset + 1; j++, m++){
+					sum += (locInput[(th + i)*tsize + tw + j] * locFilter[l * filterSize + m]);
+				}
+			}
+
+			/*coordinate del pixel all'interno della nuova immagine*/
+			int nh = h - offset;
+			int nw = w - offset;
+			//salviamo il nuovo pixel nell'output
+			output[nh * (cols - filterSize + 1) + nw] = sum/norm;
+		}	
+	}		
+}
