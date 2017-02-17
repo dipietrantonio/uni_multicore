@@ -1,11 +1,6 @@
-##Repository di Multicore
+##Multicore systems programming
 
-Questa repository contiene diversi esercizi svolti per il corso di multicore dell'anno 
-2015/2016. Ad ogni cartella corrisponde un esempio, il Main esterno è il punto di entrata del programma.
+This repo contains several exercises about concurrent and parallel algorithms done during the Multicore course at La Sapienza,
+2015/2016. Each folder contains classes relative to an exercise to solve.
 
-Alcune classi sono dipendenti da altre presenti in differenti cartelle!
-
-Se ci sono errori o dubbi non esistate a segnalarli!
-
-AUTORE: Cristian Di Pietrantonio
-
+There are dependencies between classes in different exercises.
